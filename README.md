@@ -11,7 +11,7 @@
 >>
 >> Link en Heroku: https://sparkliveone.herokuapp.com/
 >>
->> ![]link
+>> ![](https://github.com/ErnestoCamachoA9805/SparkWebLive/blob/main/Recursos/images/React-Taller1.png)
 >>
 > ## Instrucciones de uso
 >> El proyecto tiene un comboBox con las opciones de informacion que soporta, y un cuadro de texto para que el usuario ponga el acronimo de la empresa que le interesa, para mas informacion en el acronimo de la empresa leer Documentacion.
