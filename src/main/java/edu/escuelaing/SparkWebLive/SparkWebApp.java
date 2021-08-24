@@ -10,6 +10,9 @@ import edu.escuelaing.SparkWebLive.HttpRequest.*;
 import java.io.IOException;
 import org.json.JSONObject;
 
+/**
+ * Clase Principal del proyecto
+ */
 public class SparkWebApp {
 
     private static HttpConectionInterface httpConectionInterface= new HttpConnection();
@@ -48,6 +51,13 @@ public class SparkWebApp {
         get("/facade", (req,res) -> facadePage(req, res));
     }
 
+    /**
+     * Get the JSON object of the solicited values
+     * @param req
+     * @param res
+     * @return
+     * @throws IOException
+     */
     private static JSONObject facadePage(Request req, Response res) throws IOException {
         res.type("application/json");
         String funcion= req.queryParams("function");
@@ -62,6 +72,12 @@ public class SparkWebApp {
         }
     }
 
+    /**
+     * 
+     * @param req
+     * @param res
+     * @return
+     */
     private static String resultsPage(Request req, Response res) {
         return req.queryParams("firstname") + " " +
                 req.queryParams("lastname");
