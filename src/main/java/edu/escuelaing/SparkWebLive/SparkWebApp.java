@@ -4,7 +4,16 @@ import spark.Request;
 import spark.Response;
 import static spark.Spark.*;
 
+import edu.escuelaing.SparkWebLive.Cache.*;
+import edu.escuelaing.SparkWebLive.HttpRequest.*;
+
+import java.io.IOException;
+import org.json.JSONObject;
+
 public class SparkWebApp {
+
+    private static HttpConectionInterface httpConectionInterface= new HttpConnection();
+    private static CacheInterface cache= new JsonCache();
     /**
      * This main method uses SparkWeb static methods and lambda functions to
      * create a simple Hello World web app. It maps the lambda function to the
@@ -13,29 +22,22 @@ public class SparkWebApp {
     public static void main(String[] args) {
         staticFiles.location("/public");
         port(getPort());
-        get("/inputdata", (req, res) -> inputDataPage(req, res));
         get("/results", (req, res) -> resultsPage(req, res));
+        get("/facade", (req,res) -> facadePage(req, res));
     }
 
-    private static String inputDataPage(Request req, Response res) {
-        String pageContent
-                = "<!DOCTYPE html>"
-                + "<html>"
-                + "<body>"
-                + "<h2>HTML Forms</h2>"
-                + "<form action=\"/results\">"
-                + "  First name:<br>"
-                + "  <input type=\"text\" name=\"firstname\" value=\"Mickey\">"
-                + "  <br>"
-                + "  Last name:<br>"
-                + "  <input type=\"text\" name=\"lastname\" value=\"Mouse\">"
-                + "  <br><br>"
-                + "  <input type=\"submit\" value=\"Submit\">"
-                + "</form>"
-                + "<p>If you click the \"Submit\" button, the form-data will be sent to a page called \"/results\".</p>"
-                + "</body>"
-                + "</html>";
-        return pageContent;
+    private static JSONObject facadePage(Request req, Response res) throws IOException {
+        res.type("application/json");
+        String funcion= req.queryParams("function");
+        String empresa= req.queryParams("empresa");
+        String key= funcion + empresa;
+        if(cache.contais(key)){
+            return cache.getValue(key);
+        }else{
+            JSONObject currentRequest= httpConectionInterface.chooseFunction(funcion,empresa);
+            cache.addValue(key, currentRequest);
+            return currentRequest;
+        }
     }
 
     private static String resultsPage(Request req, Response res) {
